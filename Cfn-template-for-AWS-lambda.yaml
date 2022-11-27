@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Understanding of deployement of lambda via CFN - Template
+Parameters:
+    ResourcePrefix:
+       Description: "Groups resources under a single prefix"
+       Type: String
+       Default: "tpscloud0"
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "tpscloud0role"
+      Path: !Sub "/${ResourcePrefix}/"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: !Sub ${ResourcePrefix}-Lambdapolicy
+          PolicyDocument:
+            Statement:
+             - Sid: Stmt1636547407713
+               Action: '*'
+               Effect: Allow
+               Resource: '*'
+             
+  tpslambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${ResourcePrefix}-lambda-function
+      Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |
+                  import boto3
+                  def lambda_handler(event, context):
+                     print("My first lambda function via cfn template")
+      Timeout: 60
+      MemorySize: 128
