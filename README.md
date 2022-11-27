@@ -1,2 +1,6 @@
-# cloudformationtemplateforAWSlambdafunction
-The repository will hold a simple CFN -template to deploy a lambda function using code using cloud formation YAML as a template 
+Purpose:
+This repository will hold the cloudformation template in YAML , inorder to deploy a simple lambda function and its relevant role .
+
+
+How to use it :
+Paste the CFN Template into designer , validate it fill the relevant details and upload it.
